@@ -1,0 +1,12 @@
+node_modules/
+.next/
+out/
+data/*.db
+data/*.db-shm
+data/*.db-wal
+data/*.sqlite
+data/*.sqlite-wal
+data/*.sqlite-shm
+data/*.json
+.env
+.env.local

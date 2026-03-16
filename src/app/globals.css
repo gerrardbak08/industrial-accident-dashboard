@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Leaflet map z-index fix for Next.js */
+.leaflet-container {
+  z-index: 0;
+}
+
+/* Smooth transitions for chart tooltips */
+.recharts-tooltip-wrapper {
+  transition: none !important;
+}
