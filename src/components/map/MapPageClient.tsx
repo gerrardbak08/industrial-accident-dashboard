@@ -637,14 +637,37 @@ export default function MapPageClient({ initialStoreRisks, hierarchy }: Props) {
         )}
       </div>
 
-      {/* Full-width store table */}
+      {/* Full-width store list */}
       {displayedStores.length > 0 && (
         <div className="rounded-xl bg-white shadow-sm overflow-hidden">
           <div className="p-4 border-b flex items-center justify-between">
             <p className="text-sm font-semibold text-gray-700">재해 발생 매장 목록</p>
             <p className="text-xs text-gray-400">{displayedStores.length}개 매장</p>
           </div>
-          <div className="overflow-x-auto">
+
+          {/* Mobile: card list */}
+          <div className="sm:hidden divide-y divide-gray-100">
+            {displayedStores.map((s) => (
+              <div
+                key={s.store_name}
+                className={`px-4 py-3 cursor-pointer transition-colors ${selectedStore === s.store_name ? 'bg-blue-50' : 'active:bg-gray-50'}`}
+                onClick={() => setSelectedStore(s.store_name)}
+              >
+                <div className="flex items-center justify-between gap-2">
+                  <span className="font-semibold text-sm text-gray-900 truncate">{s.store_name}</span>
+                  <span className="shrink-0 text-sm font-bold tabular-nums text-gray-900">{s.accident_count}건</span>
+                </div>
+                <div className="mt-1 flex items-center gap-2 flex-wrap">
+                  <span className="text-xs text-gray-500">{s.team}</span>
+                  <RiskBadge level={s.risk_level} />
+                  <AccidentTypeBadges types={s.top_accident_types} />
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Desktop: table */}
+          <div className="hidden sm:block overflow-x-auto">
             <table className="w-full text-sm">
               <thead className="bg-gray-50 text-xs text-gray-500">
                 <tr>
