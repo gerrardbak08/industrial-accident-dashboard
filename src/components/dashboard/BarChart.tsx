@@ -1,8 +1,5 @@
 'use client'
 
-/**
- * Generic horizontal bar chart used by department, team, accident-type views.
- */
 import {
   BarChart,
   Bar,
@@ -41,7 +38,7 @@ export default function BarChartCard({
 
   if (display.length === 0) {
     return (
-      <div className="flex h-64 flex-col items-center justify-center rounded-xl bg-white p-5 shadow-sm">
+      <div className="flex h-64 flex-col items-center justify-center rounded-2xl bg-white p-5 shadow-sm ring-1 ring-gray-100">
         <p className="text-sm font-semibold text-gray-600">{title}</p>
         <p className="mt-4 text-sm text-gray-400">데이터가 없습니다</p>
       </div>
@@ -49,7 +46,7 @@ export default function BarChartCard({
   }
 
   return (
-    <div className="rounded-xl bg-white p-5 shadow-sm">
+    <div className="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-gray-100">
       <div className="mb-4 flex items-start gap-2.5">
         <span className="mt-0.5 inline-block h-4 w-1 shrink-0 rounded-full" style={{ backgroundColor: color ?? '#E50012' }} />
         <div>
@@ -57,18 +54,22 @@ export default function BarChartCard({
           {description && <p className="mt-0.5 text-xs text-gray-400">{description}</p>}
         </div>
       </div>
-      <ResponsiveContainer width="100%" height={Math.max(180, display.length * 36)}>
-        {layout === 'vertical' ? (
-          <BarChart data={display} layout="vertical" margin={{ left: 8, right: 24, top: 4, bottom: 4 }}>
-            <CartesianGrid strokeDasharray="3 3" horizontal={false} />
-            <XAxis type="number" tick={{ fontSize: 11 }} />
+
+      {layout === 'vertical' ? (
+        <ResponsiveContainer width="100%" height={Math.max(180, display.length * 34)}>
+          <BarChart data={display} layout="vertical" margin={{ left: 0, right: 24, top: 2, bottom: 2 }}>
+            <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f3f4f6" />
+            <XAxis type="number" tick={{ fontSize: 10, fill: '#9ca3af' }} axisLine={false} tickLine={false} />
             <YAxis
               type="category"
               dataKey="label"
-              tick={{ fontSize: 11 }}
-              width={120}
+              tick={{ fontSize: 11, fill: '#374151' }}
+              width={110}
+              axisLine={false}
+              tickLine={false}
             />
             <Tooltip
+              cursor={{ fill: '#f9fafb' }}
               formatter={(value: number, name: string) =>
                 name === 'count' ? [`${value}건`, '재해 건수'] : [`${value}일`, '근로손실일수']
               }
@@ -79,29 +80,35 @@ export default function BarChartCard({
               ))}
             </Bar>
           </BarChart>
-        ) : (
-          <BarChart data={display} margin={{ left: 4, right: 4, top: 4, bottom: 40 }}>
-            <CartesianGrid strokeDasharray="3 3" vertical={false} />
-            <XAxis
+        </ResponsiveContainer>
+      ) : (
+        /* Horizontal layout: use vertical bar list instead of rotated X labels on mobile */
+        <ResponsiveContainer width="100%" height={Math.max(180, display.length * 34)}>
+          <BarChart data={display} layout="vertical" margin={{ left: 0, right: 24, top: 2, bottom: 2 }}>
+            <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f3f4f6" />
+            <XAxis type="number" tick={{ fontSize: 10, fill: '#9ca3af' }} axisLine={false} tickLine={false} />
+            <YAxis
+              type="category"
               dataKey="label"
-              tick={{ fontSize: 11 }}
-              angle={-35}
-              textAnchor="end"
+              tick={{ fontSize: 11, fill: '#374151' }}
+              width={110}
+              axisLine={false}
+              tickLine={false}
             />
-            <YAxis tick={{ fontSize: 11 }} />
             <Tooltip
+              cursor={{ fill: '#f9fafb' }}
               formatter={(value: number, name: string) =>
                 name === 'count' ? [`${value}건`, '재해 건수'] : [`${value}일`, '근로손실일수']
               }
             />
-            <Bar dataKey="count" radius={[4, 4, 0, 0]}>
+            <Bar dataKey="count" radius={[0, 4, 4, 0]}>
               {display.map((_, i) => (
                 <Cell key={i} fill={color ?? COLORS[i % COLORS.length]} />
               ))}
             </Bar>
           </BarChart>
-        )}
-      </ResponsiveContainer>
+        </ResponsiveContainer>
+      )}
     </div>
   )
 }
