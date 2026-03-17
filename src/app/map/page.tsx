@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 /**
  * /map — Risk map page (server component shell).
  *
